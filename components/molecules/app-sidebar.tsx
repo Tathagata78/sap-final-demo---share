@@ -46,6 +46,7 @@ const data = {
       title: "Analysis",
       url: "/analysis",
       icon: SquareTerminal,
+      isActive: true,
       items: [
         {
           title: "Security Advisor",
@@ -156,7 +157,7 @@ const data = {
   //     icon: Map,
   //   },
   // ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (

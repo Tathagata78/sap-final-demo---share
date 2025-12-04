@@ -17,6 +17,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/components/atoms/darkmode";
 import { FeedbackForm } from "../atoms/feedback";
 import Notification from "../atoms/notification";
+import { UploadDialog } from "../atoms/uploadFiles";
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar();
@@ -78,6 +79,7 @@ export function SiteHeader() {
           <Notification />
           <ModeToggle />
           <FeedbackForm />
+          <UploadDialog />
         </div>
       </div>
     </header>
