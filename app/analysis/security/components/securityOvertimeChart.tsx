@@ -53,7 +53,7 @@ export function SecurityOverTimeChart() {
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
+              left: 8,
               right: 12,
             }}
           >

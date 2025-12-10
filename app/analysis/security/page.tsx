@@ -3,13 +3,15 @@ import { Download, ShieldCheck, Server, Clock } from "lucide-react";
 import { SecurityEffectivenessChart } from "./components/securityEffectiveChart";
 import { SecurityOverTimeChart } from "./components/securityOvertimeChart";
 import { SecurityEffectiveness } from "./components/securityEffectiveness";
+import CriticalityOccurrence from "./components/criticalityOccurence";
+import { CoverageCard } from "./components/coverageCard";
 
 const SecurityAdvisor = () => {
   const lastUpdated = new Date().toLocaleString();
   const totalAssets = 1243;
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground p-8 space-y-8">
+    <div className="flex flex-col min-h-screen bg-background text-foreground p-2 space-y-4">
       {/* --- Header Section --- */}
       <div className="flex flex-col space-y-2">
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
@@ -60,7 +62,18 @@ const SecurityAdvisor = () => {
       <div className="w-full">
         <SecurityEffectiveness />
       </div>
-      
+
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* --- Critical Details Section */}
+        <div className="w-full md:w-1/2">
+          <CriticalityOccurrence />
+        </div>
+
+        {/* --- Coverage Card Section */}
+        <div className="w-full md:w-1/2">
+          <CoverageCard />
+        </div>
+      </div>
     </div>
   );
 };

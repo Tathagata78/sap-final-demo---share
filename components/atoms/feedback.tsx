@@ -2,18 +2,15 @@
 
 import { useState } from "react";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"; 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-// import { Label } from "@/components/ui/label";
 
 export function FeedbackForm() {
   const [open, setOpen] = useState(false);
@@ -22,7 +19,6 @@ export function FeedbackForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Function to reset the form into its initial state.
   const resetForm = () => {
     setFeedback("");
     setError(null);
@@ -78,56 +74,63 @@ export function FeedbackForm() {
         Feedback
       </Button>
 
-      <AlertDialog
+      <Dialog
         open={open}
         onOpenChange={(o) => {
           if (!o) resetForm();
           setOpen(o);
         }}
       >
-        <AlertDialogContent className="dark:bg-gray-800">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-sm">
+        <DialogContent className="sm:max-w-[425px] bg-white border-slate-200 dark:bg-neutral-900 dark:border-neutral-800">
+          <DialogHeader>
+            <DialogTitle className="text-sm font-semibold text-slate-900 dark:text-neutral-100">
               Provide Your Feedback
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-xs">
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500 dark:text-neutral-400">
               We appreciate your feedback! Please let us know your thoughts.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="grid gap-4">
-            <div className="grid grid-cols-4 items-center gap-10">
-              <div className="col-span-4">
-                <Textarea
-                  id="feedback"
-                  placeholder="Enter your feedback here..."
-                  value={feedback}
-                  onChange={(e) => setFeedback(e.target.value)}
-                  className="resize-none border dark:border-gray-500 text-xs placeholder:text-xs"
-                />
-              </div>
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-4 py-2">
+            <div className="grid items-center gap-4">
+              <Textarea
+                id="feedback"
+                placeholder="Enter your feedback here..."
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                className="resize-none min-h-[100px] text-xs placeholder:text-xs 
+                  border-slate-200 focus-visible:ring-slate-400 
+                  dark:bg-neutral-950 dark:border-neutral-800 dark:text-neutral-200 dark:placeholder:text-neutral-500 dark:focus-visible:ring-neutral-700"
+              />
             </div>
+            {error && <p className="text-red-500 text-xs italic">{error}</p>}
           </div>
-          {error && <p className="text-red-500 mt-2 text-xs italic">{error}</p>}
-          <AlertDialogFooter>
-            <AlertDialogCancel
+
+          <DialogFooter className="flex-row justify-end space-x-2">
+            <Button
+              variant="outline"
               onClick={handleCancel}
-              className=" border dark:border-gray-700 text-xs"
+              className="h-8 text-xs border-slate-200 text-slate-700 hover:bg-slate-100 
+                dark:border-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
             >
               Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
+            </Button>
+            <Button
               onClick={handleSubmit}
-              className="text-xs"
               disabled={submitting}
+              className="h-8 text-xs bg-slate-900 text-white hover:bg-slate-800 
+                dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
             >
               {submitting ? "Submitting..." : "Submit"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {submitted && (
-        <div className="mt-4 text-green-500">Thank you for your feedback!</div>
+        <div className="mt-4 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+          Thank you for your feedback!
+        </div>
       )}
     </>
   );
