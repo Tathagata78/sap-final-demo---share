@@ -77,7 +77,7 @@ export function UploadDialog() {
         try {
           URL.revokeObjectURL(p.preview);
         } catch {
-          /* error */
+          /* the error handling part */
         }
       });
     }
@@ -142,12 +142,12 @@ export function UploadDialog() {
             maxSize={1024 * 1024 * 10}
             className={
               "w-full h-40 rounded-lg overflow-hidden px-6 flex flex-col justify-center items-center " +
-              "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+              "bg-white border border-slate-200 dark:border-neutral-800"
             }
           >
             <DropzoneEmptyState className="text-center space-y-2">
               <div className="flex flex-col items-center gap-2">
-                <div className="rounded-full p-2 bg-slate-50 dark:bg-slate-700 border border-slate-100 dark:border-slate-600">
+                <div className="rounded-full p-2 bg-slate-50 dark:bg-accent border border-slate-100 dark:border-neutral-600">
                   <CloudUpload className="h-5 w-5 text-slate-600 dark:text-slate-200" />
                 </div>
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-200">

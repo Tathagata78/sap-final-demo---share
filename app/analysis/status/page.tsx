@@ -4,13 +4,16 @@ import StatusInventory from "./components/statusInventory";
 import IssueTrendChart from "./components/issueTrendChart";
 import IncidentsAlertsCard from "./components/incedentsAlert";
 import IssueOccurrencesCard from "./components/issueOccurences";
+import ComplianceJobTable from "./components/compliance/complianceTable";
+import AssessmentJobTable from "./components/assessment/assessmentTable";
+import IncidentsBySeverity from "./components/incidentsSeverity";
 
 const StatusTrends = () => {
   const lastUpdated = new Date().toLocaleString();
   const totalAssets = 1608;
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground p-2 space-y-4">
+    <div className="flex flex-col min-h-screen bg-background text-foreground px-2 py-4 space-y-4">
       {/* --- Header Section --- */}
       <div className="flex flex-col space-y-2">
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
@@ -48,27 +51,36 @@ const StatusTrends = () => {
 
       {/* --- Main Dashboard Content Grid --- */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-        {/* Left Side: Inventory */}
         <div className="lg:col-span-2 h-full">
           <StatusInventory />
         </div>
-
-        {/* Right Side: Issue Trends */}
         <div className="lg:col-span-3 h-full">
           <IssueTrendChart />
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Left Side: Inventory */}
         <div className="lg:col-span-1 h-full">
-          <IncidentsAlertsCard newIncidents={0} />
+          <IncidentsAlertsCard newIncidents={4} />
         </div>
-
-        {/* Right Side: Issue Trends */}
         <div className="lg:col-span-3 h-full">
           <IssueOccurrencesCard />
         </div>
+      </div>
+
+      {/* --- Compliance Jobs Section --- */}
+      <div className="w-full">
+        <ComplianceJobTable />
+      </div>
+
+      {/* --- Assessment Jobs Section --- */}
+      <div className="w-full">
+        <AssessmentJobTable />
+      </div>
+
+      {/* --- Severity Status Section --- */}
+      <div className="w-full">
+        <IncidentsBySeverity />
       </div>
     </div>
   );

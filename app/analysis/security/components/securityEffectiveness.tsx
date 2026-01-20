@@ -111,7 +111,6 @@ const getAgingConfig = (category: string) => {
 
 function ResolutionRadialCard({ item }: { item: ResolutionMetric }) {
   const config = severityConfig[item.category];
-
   const chartData = [
     {
       name: "usage",
@@ -268,7 +267,6 @@ export function SecurityEffectiveness() {
 
           {/* --- RIGHT COLUMN: VULNERABILITY AGING --- */}
           <div className="flex flex-col h-full overflow-hidden">
-            {/* Header / Filter */}
             <div className="px-5 py-3 flex items-center justify-between bg-white/30 dark:bg-zinc-900/30  z-10">
               <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 text-zinc-400" />
@@ -356,7 +354,7 @@ export function SecurityEffectiveness() {
                         </div>
                         <Progress
                           value={riskPercentage}
-                          className="h-1.5 bg-zinc-100 dark:bg-zinc-800"
+                          className="h-1.5 bg-zinc-100 dark:bg-zinc-800 *:data-[slot=progress-indicator]:bg-accent-foreground"
                         >
                           <div
                             className={`h-full w-full flex-1 transition-all ${config.progress}`}

@@ -3,11 +3,11 @@ import {
   ArrowDown,
   ArrowUp,
   Minus,
-  AlertOctagon,
   XCircle,
   CheckCircle2,
   FileCheck,
   Layers,
+  Bug,
 } from "lucide-react";
 
 interface MetricData {
@@ -26,31 +26,32 @@ const totalCount =
 
 const VARIANTS = {
   unresolved: {
-    container:
-      "bg-red-50 border-red-100 dark:bg-red-950/20 dark:border-red-900/50",
-    label: "text-red-700 dark:text-red-500",
-    count: "text-accent-foreground",
+    container: "bg-red-50/30 border-red-100/50 dark:bg-red-800/20 dark:border-red-900/20",
+    label: "text-red-600 dark:text-red-400",
+    count: "text-foreground",
     icon: "text-red-500",
+    bar: "bg-red-500",
   },
   resolved: {
-    container:
-      "bg-emerald-50 border-emerald-100 dark:bg-emerald-950/20 dark:border-emerald-900/50",
-    label: "text-emerald-700 dark:text-emerald-500",
-    count: "text-accent-foreground",
+    container: "bg-emerald-50/30 border-emerald-100/50 dark:bg-emerald-800/20 dark:border-emerald-900/20",
+    label: "text-emerald-600 dark:text-emerald-400",
+    count: "text-foreground",
     icon: "text-emerald-500",
+    bar: "bg-emerald-500",
   },
   accepted: {
-    container:
-      "bg-blue-50 border-blue-100 dark:bg-blue-950/20 dark:border-blue-900/50",
-    label: "text-blue-700 dark:text-blue-500",
-    count: "text-accent-foreground",
+    container: "bg-blue-50/30 border-blue-100/50 dark:bg-blue-800/20 dark:border-blue-900/20",
+    label: "text-blue-600 dark:text-blue-400",
+    count: "text-foreground",
     icon: "text-blue-500",
+    bar: "bg-blue-500",
   },
   default: {
     container: "bg-transparent border-none p-0",
     label: "text-muted-foreground",
-    count: "text-foreground",
+    count: "text-blue-600 dark:text-blue-500",
     icon: "text-muted-foreground",
+    bar: "bg-blue-600",
   },
 };
 
@@ -74,45 +75,52 @@ const StatColumn = ({
 
   const isPositive = percentageChange > 0;
   const isNeutral = percentageChange === 0;
-
   const styles = VARIANTS[variant];
 
   const trendColor = isNeutral
     ? "text-muted-foreground"
     : variant !== "default"
-    ? styles.label 
+    ? styles.label
     : isPositive
     ? "text-green-600 dark:text-green-500"
     : "text-red-600 dark:text-red-500";
 
   return (
     <div
-      className={`flex h-full w-full ${
+      className={`group relative flex h-full w-full transition-all duration-300 ${
         isTotal
-          ? "flex-row items-center gap-2 px-4" 
-          : `flex-col items-start justify-between rounded-xl border p-4 ${styles.container}`
+          ? "flex-row items-center gap-1 pr-4"
+          : `flex-col items-start justify-between overflow-hidden rounded-xl border pb-4 pt-1 px-3 ${styles.container}`
       }`}
     >
+      {!isTotal && (
+        <div
+          className={`absolute bottom-0 left-0 h-1 w-full opacity-20 transition-opacity group-hover:opacity-100 ${styles.bar}`}
+        />
+      )}
+
       <div
-        className={`flex w-full items-center justify-between ${
-          isTotal ? "mb-0 w-auto" : "mb-3"
-        }`}
+        className={`flex w-full items-center justify-between`}
       >
         <span
-          className={`text-xs font-bold uppercase tracking-wider ${
+          className={`text-[10px] font-bold uppercase tracking-[0.15em] ${
             isTotal ? "text-blue-600 dark:text-blue-500" : styles.label
           }`}
         >
           {label}
         </span>
-        {!isTotal && <Icon className={`h-4 w-4 ${styles.icon}`} />}
+        {!isTotal && (
+          <div className="rounded-lg bg-background/50 p-1.5 backdrop-blur-sm">
+            <Icon className={`h-4 w-4 ${styles.icon}`} />
+          </div>
+        )}
       </div>
 
-      <div className="flex items-baseline space-x-2">
+      <div className="flex items-baseline space-x-3">
         <span
-          className={`font-bold leading-none tracking-tight ${
+          className={`font-bold leading-none tracking-tighter ${
             isTotal
-              ? "text-5xl text-blue-600 dark:text-blue-500"
+              ? "text-6xl text-blue-600 dark:text-blue-500"
               : `text-3xl ${styles.count}`
           }`}
         >
@@ -120,7 +128,9 @@ const StatColumn = ({
         </span>
 
         {!isTotal && hasPercentage && (
-          <div className={`flex items-center text-xs font-bold ${trendColor}`}>
+          <div
+            className={`flex items-center rounded-full bg-background/50 px-2 py-0.5 text-[10px] font-bold shadow-sm ${trendColor}`}
+          >
             {isNeutral ? (
               <Minus className="mr-0.5 h-3 w-3" />
             ) : isPositive ? (
@@ -138,16 +148,15 @@ const StatColumn = ({
 
 const IssueOccurrencesCard = () => {
   return (
-    <Card className="w-full shadow-md dark:bg-card dark:border-border gap-2">
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="w-full dark:bg-card dark:border-border gap-2 pb-5">
+      <CardHeader className="flex flex-row items-center gap-4">
+        <Bug className="h-4 w-4 text-red-500" />
         <CardTitle className="text-sm font-medium tracking-wider text-muted-foreground uppercase">
           Issue Occurrences
         </CardTitle>
-        <AlertOctagon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
-          {/* 1. TOTAL ISSUES (Kept clean/minimal) */}
           <div className="flex items-center justify-center md:justify-start">
             <StatColumn
               label="Total Issues"
@@ -159,7 +168,6 @@ const IssueOccurrencesCard = () => {
             />
           </div>
 
-          {/* 2. Unresolved (Red Theme) */}
           <div>
             <StatColumn
               label="Unresolved"
@@ -170,7 +178,6 @@ const IssueOccurrencesCard = () => {
             />
           </div>
 
-          {/* 3. Resolved (Green/Emerald Theme) */}
           <div>
             <StatColumn
               label="Resolved"
@@ -181,7 +188,6 @@ const IssueOccurrencesCard = () => {
             />
           </div>
 
-          {/* 4. Accepted (Blue Theme) */}
           <div>
             <StatColumn
               label="Accepted"

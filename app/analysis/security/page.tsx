@@ -11,7 +11,7 @@ const SecurityAdvisor = () => {
   const totalAssets = 1243;
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground p-2 space-y-4">
+    <div className="flex flex-col min-h-screen bg-background text-foreground px-2 py-4 space-y-4">
       {/* --- Header Section --- */}
       <div className="flex flex-col space-y-2">
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">

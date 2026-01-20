@@ -4,29 +4,18 @@ import * as React from "react"
 import {
   BookOpen,
   Bot,
-  Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
   Settings,
   Settings2,
   SquareTerminal,
 } from "lucide-react"
 
 import { NavMain } from "@/components/atoms/nav-main"
-import { NavProjects } from "@/components/atoms/nav-projects"
 import { NavSecondary } from "@/components/atoms/nav-secondary"
 import { NavUser } from "@/components/atoms/nav-user"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
 const data = {
@@ -44,7 +33,6 @@ const data = {
     },
     {
       title: "Analysis",
-      url: "/analysis",
       icon: SquareTerminal,
       isActive: true,
       items: [
@@ -60,7 +48,6 @@ const data = {
     },
     {
       title: "Assess",
-      url: "/assess",
       icon: Bot,
       items: [
         {
@@ -83,7 +70,6 @@ const data = {
     },
     {
       title: "Inventory",
-      url: "#",
       icon: Settings2,
       items: [
         {
@@ -110,7 +96,6 @@ const data = {
     },
     {
       title: "Policies",
-      url: "#",
       icon: BookOpen,
       items: [
         {

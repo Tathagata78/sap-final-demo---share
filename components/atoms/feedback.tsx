@@ -81,7 +81,7 @@ export function FeedbackForm() {
           setOpen(o);
         }}
       >
-        <DialogContent className="sm:max-w-[425px] bg-white border-slate-200 dark:bg-neutral-900 dark:border-neutral-800">
+        <DialogContent className="sm:max-w-[425px] bg-accent">
           <DialogHeader>
             <DialogTitle className="text-sm font-semibold text-slate-900 dark:text-neutral-100">
               Provide Your Feedback
@@ -111,7 +111,7 @@ export function FeedbackForm() {
               variant="outline"
               onClick={handleCancel}
               className="h-8 text-xs border-slate-200 text-slate-700 hover:bg-slate-100 
-                dark:border-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+                dark:border-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white"
             >
               Cancel
             </Button>

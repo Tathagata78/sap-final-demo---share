@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 
@@ -15,16 +14,16 @@ const IncidentsAlertsCard = ({ newIncidents }: IncidentsAlertsProps) => {
     : "text-red-600 dark:text-red-500";
 
   return (
-    <Card className="w-full max-w-sm shadow-md hover:shadow-lg transition-shadow duration-200 dark:bg-card dark:border-border gap-4">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-sm font-medium tracking-wider text-muted-foreground uppercase">
-          Incidents & Alerts
-        </CardTitle>
+    <Card className="w-full max-w-sm dark:bg-card dark:border-border gap-4">
+      <CardHeader className="flex flex-row items-center gap-4">
         {isZero ? (
-          <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+          <CheckCircle2 className="h-4 w-4 text-green-500" />
         ) : (
           <AlertCircle className="h-4 w-4 text-red-500" />
         )}
+        <CardTitle className="text-sm font-medium tracking-wider text-muted-foreground uppercase">
+          Incidents & Alerts
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex items-baseline space-x-4">
