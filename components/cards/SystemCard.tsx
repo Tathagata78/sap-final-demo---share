@@ -8,16 +8,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { LucideIcon, TriangleAlert, Timer, ShieldCheck } from "lucide-react";
+import {  TriangleAlert, Timer, ShieldCheck } from "lucide-react";
 import SystemDetailsDialog from "./systemDetailsDialog";
 
 export type SystemStatus = "Critical" | "Warning" | "Protected";
 
 interface SystemCardProps {
-  icon: LucideIcon;
   title: string;
   status: SystemStatus;
   version: string;
@@ -25,33 +23,28 @@ interface SystemCardProps {
   lastPatch: string;
 }
 
-/**
- * Status config includes both light and dark mode classes.
- * Keep the same keys so the rest of the component is unchanged.
- */
 const statusConfig = {
   Critical: {
     icon: TriangleAlert,
     badgeClass:
-      "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 border border-red-200 dark:border-red-800",
-    vulnerabilityClass: "text-red-700 dark:text-red-300 font-semibold",
+      "text-rose-600 dark:text-rose-400 bg-rose-100/50 dark:bg-rose-900/20",
+    vulnerabilityClass: "text-rose-600 dark:text-rose-400 font-semibold",
   },
   Warning: {
     icon: Timer,
     badgeClass:
-      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-800",
-    vulnerabilityClass: "text-yellow-700 dark:text-yellow-300 font-semibold",
+      "bg-yellow-100/50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400",
+    vulnerabilityClass: "text-yellow-600 dark:text-yellow-400 font-semibold",
   },
   Protected: {
     icon: ShieldCheck,
     badgeClass:
-      "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 border border-green-200 dark:border-green-800",
-    vulnerabilityClass: "text-green-700 dark:text-green-300 font-semibold",
+      "bg-green-100/50 text-green-600 dark:bg-green-900/20 dark:text-green-400",
+    vulnerabilityClass: "text-green-600 dark:text-green-400 font-semibold",
   },
 };
 
 export function SystemCard({
-  icon: Icon,
   title,
   status,
   version,
@@ -64,37 +57,16 @@ export function SystemCard({
 
   return (
     <>
-      <Card
-        className={cn(
-          "w-full max-w-sm gap-2 py-4",
-          // light / dark card surface and subtle border
-          "bg-white dark:bg-slate-800",
-          "border border-transparent dark:border-transparent",
-          // subtle shadow and rounded corners for a professional look
-          "shadow-sm dark:shadow-none",
-          "rounded-lg"
-        )}
-      >
+      <Card className="w-full max-w-sm py-4 shadow-none ">
         <CardHeader className="px-4">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2">
-              <Icon className="h-5 w-5 text-sky-600 dark:text-sky-400" />
-              <CardTitle className="text-xs font-semibold text-slate-700 dark:text-slate-200">
-                {title}
-              </CardTitle>
-            </div>
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+              {title}
+            </CardTitle>
 
-            <Badge
-              variant="outline"
-              className={cn(
-                "flex items-center gap-1 px-2 text-xs font-semibold",
-                // status-specific badge classes already include dark variants
-                config.badgeClass
-              )}
-            >
-              <BadgeIcon className="h-3.5 w-3.5" />
-              {status}
-            </Badge>
+            <div className={cn("rounded-full p-2", config.badgeClass)}>
+              <BadgeIcon className="h-4 w-4" />
+            </div>
           </div>
         </CardHeader>
 
@@ -108,11 +80,7 @@ export function SystemCard({
             Vulnerabilities:
           </span>
           <span
-            className={cn(
-              "font-medium text-right",
-              // vulnerabilityClass includes dark variants
-              config.vulnerabilityClass
-            )}
+            className={cn("font-medium text-right", config.vulnerabilityClass)}
           >
             {vulnerabilities}
           </span>
@@ -127,7 +95,7 @@ export function SystemCard({
 
         <CardFooter className="px-4">
           <Button
-            variant="secondary"
+            variant="outline"
             className="w-full text-xs cursor-pointer"
             size={"sm"}
             onClick={() => setOpen(true)}
@@ -140,7 +108,6 @@ export function SystemCard({
       <SystemDetailsDialog
         open={open}
         onOpenChange={setOpen}
-        icon={Icon}
         title={title}
         status={status}
         version={version}

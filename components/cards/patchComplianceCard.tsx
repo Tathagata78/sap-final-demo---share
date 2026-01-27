@@ -1,71 +1,106 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, TrendingDown, ShieldEllipsisIcon, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+
+interface PatchComplianceCardProps {
+  value?: number;
+  delta?: string;
+  className?: string;
+}
 
 export function PatchComplianceCard({
   value = 78,
   delta = "+5.08%",
-}: {
-  value?: number;
-  delta?: string;
-}) {
+  className,
+}: PatchComplianceCardProps) {
   const isPositive = delta.startsWith("+");
-  const DeltaIcon = isPositive ? ArrowUpRight : ArrowDownRight;
-  const deltaBadgeColor = isPositive
-    ? "bg-green-300 text-green-800 dark:bg-green-900 dark:text-green-200"
-    : "bg-red-300 text-red-800 dark:bg-red-900 dark:text-red-200";
+  const DeltaIcon = isPositive ? TrendingUp : TrendingDown;
+
+  const trendColor = isPositive
+    ? "text-emerald-600 dark:text-emerald-400"
+    : "text-rose-600 dark:text-rose-400";
+
+  const trendBg = isPositive
+    ? "bg-emerald-100/50 dark:bg-emerald-900/20"
+    : "bg-rose-100/50 dark:bg-rose-900/20";
+
+  const trendRing = isPositive ? "ring-emerald-600/20" : "ring-rose-600/20";
+
+  const buttonColor = isPositive
+    ? "bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+    : "bg-rose-600 hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-500";
 
   return (
     <Card
       className={cn(
-        // original light-mode preserved
-        "w-full max-w-sm gap-1 bg-linear-to-br from-gray-300 to-white shadow-none",
-        // dark-mode surface helpers only
-        "dark:bg-slate-800 dark:from-slate-800 dark:to-slate-900 dark:shadow-sm dark:rounded-lg"
+        "w-full max-w-sm shadow-none gap-4 overflow-hidden",
+        className,
       )}
     >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0 px-4">
-        <CardTitle
-          className={cn(
-            "text-base font-semibold text-zinc-500 dark:text-slate-200"
-          )}
-        >
-          Patch Compliance
-        </CardTitle>
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-200 dark:bg-green-900/30">
-          <TrendingUp className="h-4 w-4 text-green-500 dark:text-green-300" />
+      <CardHeader className="flex flex-row items-start justify-between space-y-0">
+        <div className="space-y-1">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            Patch Compliance
+          </CardTitle>
+          <div className="flex items-center text-xs text-muted-foreground">
+            <Activity className="mr-1 h-3 w-3" />
+            Security Scan
+          </div>
+        </div>
+        <div className={cn("p-2 rounded-full", trendBg)}>
+          <ShieldEllipsisIcon className={cn("h-5 w-5", trendColor)} />
         </div>
       </CardHeader>
 
-      <CardContent className="px-4">
-        <div className="w-full pt-2">
-          <div className="flex justify-between items-center w-full">
-            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-              {value}%
-            </div>
-
-            <Badge
-              variant="secondary"
-              className={cn(
-                "flex items-center gap-1 px-2 py-1",
-                deltaBadgeColor
-              )}
-            >
-              <DeltaIcon className="h-4 w-4" />
-              <span className="text-xs font-semibold">{delta}</span>
-            </Badge>
+      <CardContent className="space-y-4">
+        <div className="flex items-baseline space-x-3 justify-between">
+          <div className="text-4xl font-bold tracking-tight text-foreground">
+            {value}
+            <span className="text-2xl font-medium text-muted-foreground ml-1">
+              %
+            </span>
           </div>
-          <Progress
-            value={value}
-            aria-label={`${value}% Patch Compliance`}
-            className="h-2 w-full mt-2 bg-slate-200 dark:bg-slate-700"
-          />
+          <div
+            className={cn(
+              "flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset",
+              trendBg,
+              trendColor,
+              trendRing,
+            )}
+          >
+            <DeltaIcon className="mr-1 h-3 w-3" />
+            {delta}
+          </div>
         </div>
       </CardContent>
+
+      <CardFooter className="grid grid-cols-2 gap-3">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full text-xs cursor-pointer bg-background"
+        >
+          View Details
+        </Button>
+        <Button
+          size="sm"
+          className={cn(
+            "w-full text-xs text-white shadow-sm cursor-pointer",
+            buttonColor,
+          )}
+        >
+          Take Action
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

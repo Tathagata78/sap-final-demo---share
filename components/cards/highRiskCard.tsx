@@ -1,75 +1,98 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDownRight, ArrowUpRight, Shield } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, TrendingDown, ShieldQuestionMark, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+
+interface HighRiskCardProps {
+  count?: number;
+  delta?: string;
+  className?: string;
+}
 
 export function HighRiskCard({
   count = 12,
-  delta = "-3.27",
-}: {
-  count?: number;
-  delta?: string;
-}) {
-  const isPositive = delta.startsWith("+");
-  const DeltaIcon = isPositive ? ArrowUpRight : ArrowDownRight;
+  delta = "+3.27",
+  className,
+}: HighRiskCardProps) {
+  const isTrendBad = delta.startsWith("+");
+  const DeltaIcon = isTrendBad ? TrendingUp : TrendingDown;
+  const trendColor = isTrendBad
+    ? "text-rose-600 dark:text-rose-400"
+    : "text-emerald-600 dark:text-emerald-400";
 
-  // keep original light-mode classes exactly; add dark: variants only
-  const deltaBadgeColor = isPositive
-    ? "bg-red-300 text-red-800 dark:bg-red-900 dark:text-red-200"
-    : "bg-green-300 text-green-800 dark:bg-green-900 dark:text-green-200";
+  const trendBg = isTrendBad
+    ? "bg-rose-100/50 dark:bg-rose-900/20"
+    : "bg-emerald-100/50 dark:bg-emerald-900/20";
+
+  const trendRing = isTrendBad ? "ring-rose-600/20" : "ring-emerald-600/20";
 
   return (
     <Card
       className={cn(
-        // original light-mode gradient preserved
-        "w-full max-w-sm gap-2 bg-linear-to-br from-gray-300 to-white shadow-none",
-        // dark-mode surface helpers only
-        "dark:bg-slate-800 dark:from-slate-800 dark:to-slate-900 dark:shadow-sm dark:rounded-lg"
+        "w-full max-w-sm shadow-none gap-4 overflow-hidden",
+        className,
       )}
     >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0 px-4">
-        <CardTitle
-          className={cn(
-            "text-base font-semibold text-zinc-500 dark:text-slate-200"
-          )}
-        >
-          High Risk Systems
-        </CardTitle>
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-200 dark:bg-orange-900/30">
-          <Shield className="h-4 w-4 text-orange-600 dark:text-orange-300" />
+      <CardHeader className="flex flex-row items-start justify-between space-y-0">
+        <div className="space-y-1">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            High Risk Systems
+          </CardTitle>
+          <div className="flex items-center text-xs text-muted-foreground">
+            <Activity className="mr-1 h-3 w-3" />
+            System Audit
+          </div>
+        </div>
+        <div className={cn("p-2 rounded-full", trendBg)}>
+          <ShieldQuestionMark className={cn("h-5 w-5", trendColor)} />
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-0.5 px-4">
-        <div className="w-full pt-2">
-          <div className="flex justify-between items-center w-full">
-            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-              {count}
-            </div>
-            <Badge
-              variant="secondary"
-              className={cn(
-                "flex items-center gap-1 px-2 py-1",
-                deltaBadgeColor
-              )}
-            >
-              <DeltaIcon className="h-4 w-4" />
-              <span className="text-xs font-semibold">{delta}%</span>
-            </Badge>
+      <CardContent>
+        <div className="flex items-baseline space-x-3 justify-between">
+          <div className="text-4xl font-bold tracking-tight text-foreground">
+            {count}
+          </div>
+          <div
+            className={cn(
+              "flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset",
+              trendBg,
+              trendColor,
+              trendRing,
+            )}
+          >
+            <DeltaIcon className="mr-1 h-3 w-3" />
+            {delta}%
           </div>
         </div>
-
-        <Separator className="bg-accent-foreground/5 dark:bg-slate-700" />
-
-        <div className="flex justify-between gap-1 text-xs font-semibold">
-          <span className="text-zinc-500 dark:text-slate-400">
-            view details
-          </span>
-          <span className="text-zinc-400 dark:text-slate-600">•</span>
-          <span className="text-zinc-500 dark:text-slate-400">take action</span>
-        </div>
       </CardContent>
+
+      <CardFooter className="grid grid-cols-2 gap-3">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full text-xs cursor-pointer bg-background"
+        >
+          View Details
+        </Button>
+        <Button
+          size="sm"
+          className={cn(
+            "w-full text-xs text-white shadow-sm cursor-pointer",
+            isTrendBad
+              ? "bg-rose-600 hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-500"
+              : "bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500",
+          )}
+        >
+          Take Action
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

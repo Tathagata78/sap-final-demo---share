@@ -153,7 +153,7 @@ export function UploadDialog() {
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                   Drop files here or click to browse
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   Up to 5 files • Max 10 MB each
                 </p>
               </div>

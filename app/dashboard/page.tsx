@@ -16,8 +16,8 @@ export default function Page() {
         <div className="flex flex-1">
           <AppSidebar />
           <SidebarInset>
-            <div className="space-y-2 px-2">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 py-2">
+            <div className="space-y-4 px-2 py-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 <CriticalCard />
                 <HighRiskCard />
                 <PatchComplianceCard />

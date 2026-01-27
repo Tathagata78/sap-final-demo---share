@@ -1,119 +1,107 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowUpRight, ArrowDownRight, ShieldCheck } from "lucide-react";
-import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
-import { PolarAngleAxis, RadialBar, RadialBarChart } from "recharts";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, TrendingDown, ShieldCheck, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const chartConfig = {
-  capacity: {
-    label: "Protected",
-    color: "hsl(var(--primary))",
-  },
-} satisfies ChartConfig;
+interface ProtectedSystemsCardProps {
+  protectedCount?: number;
+  total?: number;
+  delta?: string;
+  className?: string;
+}
 
 export function ProtectedSystemsCard({
   protectedCount = 156,
   total = 200,
   delta = "+8.63",
-}: {
-  protectedCount?: number;
-  total?: number;
-  delta?: string;
-}) {
-  const percentage = total > 0 ? Math.round((protectedCount / total) * 100) : 0;
-
-  const chartData = [
-    {
-      name: "protected",
-      capacity: percentage,
-      fill: "var(--primary)",
-    },
-  ];
-
+  className,
+}: ProtectedSystemsCardProps) {
   const isPositive = delta.startsWith("+");
-  const DeltaIcon = isPositive ? ArrowUpRight : ArrowDownRight;
-  const deltaBadgeColor = isPositive
-    ? "bg-green-300 text-green-800 dark:bg-green-900 dark:text-green-200"
-    : "bg-red-300 text-red-800 dark:bg-red-900 dark:text-red-200";
+  const DeltaIcon = isPositive ? TrendingUp : TrendingDown;
+  const trendColor = isPositive
+    ? "text-emerald-600 dark:text-emerald-400"
+    : "text-rose-600 dark:text-rose-400";
+
+  const trendBg = isPositive
+    ? "bg-emerald-100/50 dark:bg-emerald-900/20"
+    : "bg-rose-100/50 dark:bg-rose-900/20";
+
+  const trendRing = isPositive ? "ring-emerald-600/20" : "ring-rose-600/20";
+
+  const buttonColor = isPositive
+    ? "bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+    : "bg-rose-600 hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-500";
 
   return (
     <Card
       className={cn(
-        // original light-mode preserved
-        "w-full max-w-sm gap-0 bg-linear-to-br from-gray-300 to-white shadow-none",
-        // dark-mode surface helpers only
-        "dark:bg-slate-800 dark:from-slate-800 dark:to-slate-900 dark:shadow-sm dark:rounded-lg"
+        "w-full max-w-sm shadow-none gap-4 overflow-hidden",
+        className,
       )}
     >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-0 px-4">
-        <CardTitle
-          className={cn(
-            "text-base font-semibold text-zinc-500 dark:text-slate-200"
-          )}
-        >
-          Systems Protected
-        </CardTitle>
-        <div
-          className={cn(
-            "flex h-8 w-8 items-center justify-center rounded-lg bg-blue-200",
-            "dark:bg-blue-900/30"
-          )}
-        >
-          <ShieldCheck className="h-4 w-4 text-blue-500 dark:text-blue-300" />
+      <CardHeader className="flex flex-row items-start justify-between space-y-0">
+        <div className="space-y-1">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            Systems Protected
+          </CardTitle>
+          <div className="flex items-center text-xs text-muted-foreground">
+            <Activity className="mr-1 h-3 w-3" />
+            Endpoint Security
+          </div>
+        </div>
+        <div className={cn("p-2 rounded-full", trendBg)}>
+          <ShieldCheck className={cn("h-5 w-5", trendColor)} />
         </div>
       </CardHeader>
 
-      <CardContent className="px-4">
-        <div className="flex w-full items-center justify-between pt-2">
-          <div className="relative shrink-0 flex items-center justify-center">
-            <ChartContainer config={chartConfig} className="h-14 w-14">
-              <RadialBarChart
-                data={chartData}
-                innerRadius={22}
-                outerRadius={28}
-                barSize={6}
-                startAngle={90}
-                endAngle={-270}
-              >
-                <PolarAngleAxis
-                  type="number"
-                  domain={[0, 100]}
-                  angleAxisId={0}
-                  tick={false}
-                  axisLine={false}
-                />
-                <RadialBar
-                  dataKey="capacity"
-                  background
-                  cornerRadius={10}
-                  fill="var(--primary)"
-                  angleAxisId={0}
-                />
-              </RadialBarChart>
-            </ChartContainer>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-sm font-medium text-slate-900 dark:text-slate-100">
-                {percentage}%
-              </span>
-            </div>
+      <CardContent>
+        <div className="flex items-baseline space-x-3 justify-between">
+          <div className="text-4xl font-bold tracking-tight text-foreground">
+            {protectedCount}
+            <span className="text-2xl font-medium text-muted-foreground ml-1">
+              / {total}
+            </span>
           </div>
-
-          <div className="text-xl font-bold pr-6 text-slate-900 dark:text-slate-100">
-            {protectedCount}/{total}
-          </div>
-
-          <Badge
-            variant="secondary"
-            className={cn("flex items-center gap-1 py-1", deltaBadgeColor)}
+          <div
+            className={cn(
+              "flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset",
+              trendBg,
+              trendColor,
+              trendRing,
+            )}
           >
-            <DeltaIcon className="h-4 w-4" />
-            <span className="text-xs font-semibold">{delta}%</span>
-          </Badge>
+            <DeltaIcon className="mr-1 h-3 w-3" />
+            {delta}%
+          </div>
         </div>
       </CardContent>
+
+      <CardFooter className="grid grid-cols-2 gap-3">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full text-xs cursor-pointer bg-background"
+        >
+          View Details
+        </Button>
+        <Button
+          size="sm"
+          className={cn(
+            "w-full text-xs text-white shadow-sm cursor-pointer",
+            buttonColor,
+          )}
+        >
+          Take Action
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

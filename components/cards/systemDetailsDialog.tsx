@@ -1,6 +1,5 @@
 "use client";
 
-import { LucideIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { TriangleAlert, Timer, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 export type SystemStatus = "Critical" | "Warning" | "Protected";
@@ -18,7 +16,6 @@ export type SystemStatus = "Critical" | "Warning" | "Protected";
 interface SystemDetailsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  icon: LucideIcon;
   title: string;
   status: SystemStatus;
   version: string;
@@ -47,29 +44,11 @@ function generateDemoVulnerabilities(count: number, systemName: string) {
   return results;
 }
 
-const statusBadge = {
-  Critical: {
-    className: "bg-red-200 text-red-700 dark:bg-red-900 dark:text-red-200",
-    icon: TriangleAlert,
-  },
-  Warning: {
-    className:
-      "bg-yellow-200 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200",
-    icon: Timer,
-  },
-  Protected: {
-    className:
-      "bg-green-200 text-green-700 dark:bg-green-900 dark:text-green-200",
-    icon: ShieldCheck,
-  },
-};
 
 export default function SystemDetailsDialog({
   open,
   onOpenChange,
-  icon: Icon,
   title,
-  status,
   version,
   vulnerabilities,
   lastPatch,

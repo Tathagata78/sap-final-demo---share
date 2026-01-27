@@ -368,7 +368,7 @@ export function DataTable({
   }
 
   return (
-    <div className="flex w-full flex-col gap-5 p-4">
+    <div className="flex w-full flex-col gap-5">
       {/* Header Section */}
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
