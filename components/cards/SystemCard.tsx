@@ -10,7 +10,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {  TriangleAlert, Timer, ShieldCheck } from "lucide-react";
+import {
+  TriangleAlert,
+  Timer,
+  ShieldCheck,
+  ChevronRight,
+  Activity,
+  CalendarClockIcon,
+  Server,
+} from "lucide-react";
 import SystemDetailsDialog from "./systemDetailsDialog";
 
 export type SystemStatus = "Critical" | "Warning" | "Protected";
@@ -26,21 +34,24 @@ interface SystemCardProps {
 const statusConfig = {
   Critical: {
     icon: TriangleAlert,
-    badgeClass:
-      "text-rose-600 dark:text-rose-400 bg-rose-100/50 dark:bg-rose-900/20",
-    vulnerabilityClass: "text-rose-600 dark:text-rose-400 font-semibold",
+    color: "text-rose-500",
+    bgColor: "bg-rose-500/10",
+    borderColor: "border-rose-500/60",
+    gradientFrom: "from-rose-500/90",
   },
   Warning: {
     icon: Timer,
-    badgeClass:
-      "bg-yellow-100/50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400",
-    vulnerabilityClass: "text-yellow-600 dark:text-yellow-400 font-semibold",
+    color: "text-amber-500",
+    bgColor: "bg-amber-500/10",
+    borderColor: "border-amber-500/60",
+    gradientFrom: "from-amber-500/90",
   },
   Protected: {
     icon: ShieldCheck,
-    badgeClass:
-      "bg-green-100/50 text-green-600 dark:bg-green-900/20 dark:text-green-400",
-    vulnerabilityClass: "text-green-600 dark:text-green-400 font-semibold",
+    color: "text-emerald-500",
+    bgColor: "bg-emerald-500/10",
+    borderColor: "border-emerald-500/60",
+    gradientFrom: "from-emerald-500/90",
   },
 };
 
@@ -52,55 +63,113 @@ export function SystemCard({
   lastPatch,
 }: SystemCardProps) {
   const config = statusConfig[status];
-  const BadgeIcon = config.icon;
+  const StatusIcon = config.icon;
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <Card className="w-full max-w-sm py-4 shadow-none ">
-        <CardHeader className="px-4">
-          <div className="flex justify-between items-center">
-            <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-              {title}
-            </CardTitle>
+      <Card className="w-full max-w-sm group relative overflow-hidden gap-0 shadow-none">
+        <div
+          className={cn(
+            "absolute top-0 left-0 w-full h-1 bg-linear-to-r to-transparent",
+            config.gradientFrom,
+            "opacity-80",
+          )}
+        />
 
-            <div className={cn("rounded-full p-2", config.badgeClass)}>
-              <BadgeIcon className="h-4 w-4" />
+        <CardHeader className="px-4">
+          <div className="flex justify-between items-start">
+            <div className="space-y-1">
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase flex items-center gap-2">
+                <Server className={cn("h-4 w-4", config.color)} />
+                {title}
+              </CardTitle>
             </div>
           </div>
         </CardHeader>
 
-        <CardContent className="grid grid-cols-2 gap-y-2 text-xs pb-2 px-4">
-          <span className="text-slate-500 dark:text-slate-400">Version:</span>
-          <span className="font-medium text-right text-slate-700 dark:text-slate-100">
-            {version}
-          </span>
+        <CardContent className="px-4 pt-2 pb-6 text-muted-foreground">
+          <div className="flex justify-center">
+            <div className="flex gap-2 items-baseline">
+              <span
+                className={cn(
+                  "text-4xl font-bold tracking-tight",
+                  "text-slate-900 dark:text-white",
+                )}
+              >
+                {vulnerabilities}
+              </span>
+              <span className={cn("text-sm font-medium mb-1", config.color)}>
+                Vulnerabilities
+              </span>
+            </div>
+          </div>
 
-          <span className="text-slate-500 dark:text-slate-400">
-            Vulnerabilities:
-          </span>
-          <span
-            className={cn("font-medium text-right", config.vulnerabilityClass)}
-          >
-            {vulnerabilities}
-          </span>
+          {/* <p className="text-xs mt-1 mb-6">Detected security exposures</p>
 
-          <span className="text-slate-500 dark:text-slate-400">
-            Last Patch:
-          </span>
-          <span className="font-medium text-right text-slate-700 dark:text-slate-100">
-            {lastPatch}
-          </span>
+          <div className="w-full h-1.5 rounded-full bg-muted mb-6 overflow-hidden">
+            <div
+              className={cn(
+                "h-full rounded-full opacity-80",
+                config.color.replace("text-", "bg-"),
+              )}
+              style={{
+                width:
+                  status === "Protected"
+                    ? "100%"
+                    : status === "Warning"
+                      ? "60%"
+                      : "30%",
+              }}
+            />
+          </div> */}
+
+          <div className="flex flex-col justify-between mt-2 gap-2 items-center">
+            <div className="flex gap-1 items-baseline">
+              <div className="flex gap-2">
+                <Activity className="h-3 w-3" />
+                <span className="text-[10px] uppercase font-semibold tracking-wide">
+                  Version ~
+                </span>
+              </div>
+              <span className="text-sm font-medium text-accent-foreground">
+                {version}
+              </span>
+            </div>
+
+            <div className="flex gap-1 items-baseline">
+              <div className="flex gap-2">
+                <CalendarClockIcon className="h-3 w-3" />
+                <span className="text-[10px] uppercase font-semibold tracking-wide">
+                  Last Patch ~
+                </span>
+              </div>
+              <span className="text-sm font-medium text-accent-foreground">
+                {lastPatch}
+              </span>
+            </div>
+          </div>
         </CardContent>
 
-        <CardFooter className="px-4">
+        <CardFooter className="px-4 justify-between items-center flex">
+          <div
+              className={cn(
+                "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ring-1 ring-inset",
+                config.bgColor,
+                config.color,
+                config.borderColor,
+              )}
+            >
+              <StatusIcon className="h-3.5 w-3.5" />
+              <span>{status}</span>
+            </div>
           <Button
             variant="outline"
-            className="w-full text-xs cursor-pointer"
-            size={"sm"}
+            className="cursor-pointer"
+            size="sm"
             onClick={() => setOpen(true)}
           >
-            Know More
+            <span className="text-xs font-semibold">View Details</span>
           </Button>
         </CardFooter>
       </Card>

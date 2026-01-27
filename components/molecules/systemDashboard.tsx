@@ -16,14 +16,14 @@ type FilterType = "" | "critical" | "protected" | "warning";
 
 const systemsData = [
   {
-    title: "SAP ECC 6.0",
+    title: "SAP ECC 21.6.9",
     status: "Critical" as SystemStatus,
     version: "ECC 6.0 EHP8",
     vulnerabilities: 5,
     lastPatch: "2024-01-15",
   },
   {
-    title: "Oracle Database 19c",
+    title: "Oracle Database 19.0",
     status: "Critical" as SystemStatus,
     version: "19.3.0.0",
     vulnerabilities: 12,
@@ -37,7 +37,7 @@ const systemsData = [
     lastPatch: "2024-02-15",
   },
   {
-    title: "Kubernetes Cluster (Prod)",
+    title: "Kubernetes Cluster",
     status: "Warning" as SystemStatus,
     version: "v1.28.4",
     vulnerabilities: 3,
@@ -90,7 +90,7 @@ const SystemDashboardSection = () => {
 
   return (
     <div className="w-full mx-auto">
-      <Card className="shadow-none gap-0">
+      <Card className="shadow-none gap-0 pb-4">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className="h-6 w-1 bg-primary rounded-full" />

@@ -79,6 +79,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+// New imports for the architecture
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const schema = z.object({
   id: z.number(),
@@ -221,8 +229,8 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         score >= 9
           ? "text-red-600 dark:text-red-400 font-bold"
           : score >= 7
-          ? "text-amber-600 dark:text-amber-400 font-medium"
-          : "text-muted-foreground";
+            ? "text-amber-600 dark:text-amber-400 font-medium"
+            : "text-muted-foreground";
 
       return (
         <div className={`text-right font-mono tabular-nums ${scoreColor}`}>
@@ -315,7 +323,7 @@ export function DataTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState({
@@ -326,12 +334,12 @@ export function DataTable({
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
+    useSensor(KeyboardSensor, {}),
   );
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map(({ id }) => id) || [],
-    [data]
+    [data],
   );
 
   const table = useReactTable({
@@ -368,126 +376,129 @@ export function DataTable({
   }
 
   return (
-    <div className="flex w-full flex-col gap-5">
-      {/* Header Section */}
-      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">
-            Vulnerability Report
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Manage and prioritize system vulnerabilities.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 border-dashed text-xs shadow-sm"
-              >
-                <LayoutGrid className="mr-2 size-3.5" />
-                View
-                <ChevronDown className="ml-2 size-3.5 opacity-50" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[180px]">
-              <div className="p-2 text-xs font-medium text-muted-foreground">
-                Toggle Columns
-              </div>
-              {table
-                .getAllColumns()
-                .filter(
-                  (column) =>
-                    typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
-                )
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize text-xs"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+    <div className="w-full mx-auto">
+      <Card className="shadow-none gap-0">
+        <CardHeader className="flex flex-row items-center justify-between pb-4">
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="h-6 w-1 bg-primary rounded-full" />
+              <CardTitle className="text-xl font-semibold leading-none tracking-wide uppercase">
+                Vulnerability Report
+              </CardTitle>
+            </div>
+            <CardDescription className="text-zinc-500 dark:text-zinc-400 mt-4">
+              Manage and prioritize system vulnerabilities.
+            </CardDescription>
+          </div>
 
-      {/* Table Container */}
-      <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
-        <DndContext
-          collisionDetection={closestCenter}
-          modifiers={[restrictToVerticalAxis]}
-          onDragEnd={handleDragEnd}
-          sensors={sensors}
-          id={sortableId}
-        >
-          <Table>
-            <TableHeader className="bg-muted/40">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow
-                  key={headerGroup.id}
-                  className="hover:bg-transparent border-b transition-colors"
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 border-dashed text-xs shadow-sm"
                 >
-                  {headerGroup.headers.map((header) => {
+                  <LayoutGrid className="mr-2 size-3.5" />
+                  View
+                  <ChevronDown className="ml-2 size-3.5 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[180px]">
+                <div className="p-2 text-xs font-medium text-muted-foreground">
+                  Toggle Columns
+                </div>
+                {table
+                  .getAllColumns()
+                  .filter(
+                    (column) =>
+                      typeof column.accessorFn !== "undefined" &&
+                      column.getCanHide(),
+                  )
+                  .map((column) => {
                     return (
-                      <TableHead
-                        key={header.id}
-                        colSpan={header.colSpan}
-                        className="h-10 text-xs font-medium uppercase tracking-wider text-muted-foreground"
-                        style={{
-                          width:
-                            header.getSize() !== 150
-                              ? header.getSize()
-                              : undefined,
-                        }}
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize text-xs"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
                       >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
                     );
                   })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                <SortableContext
-                  items={dataIds}
-                  strategy={verticalListSortingStrategy}
-                >
-                  {table.getRowModel().rows.map((row) => (
-                    <DraggableRow key={row.id} row={row} />
-                  ))}
-                </SortableContext>
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-32 text-center text-sm text-muted-foreground"
-                  >
-                    No results found.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </DndContext>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </CardHeader>
 
-        {/* Footer / Pagination */}
+        <CardContent className="p-0">
+          <DndContext
+            collisionDetection={closestCenter}
+            modifiers={[restrictToVerticalAxis]}
+            onDragEnd={handleDragEnd}
+            sensors={sensors}
+            id={sortableId}
+          >
+            <Table>
+              <TableHeader className="bg-muted/40">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow
+                    key={headerGroup.id}
+                    className="hover:bg-transparent border-b transition-colors"
+                  >
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          colSpan={header.colSpan}
+                          className="h-10 text-xs font-medium uppercase tracking-wider text-muted-foreground"
+                          style={{
+                            width:
+                              header.getSize() !== 150
+                                ? header.getSize()
+                                : undefined,
+                          }}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  <SortableContext
+                    items={dataIds}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {table.getRowModel().rows.map((row) => (
+                      <DraggableRow key={row.id} row={row} />
+                    ))}
+                  </SortableContext>
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-32 text-center text-sm text-muted-foreground"
+                    >
+                      No results found.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </DndContext>
+        </CardContent>
+
         <div className="flex items-center justify-between border-t p-4">
           <div className="flex-1 text-xs text-muted-foreground">
             <span className="font-medium text-foreground">
@@ -571,7 +582,7 @@ export function DataTable({
             </div>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
